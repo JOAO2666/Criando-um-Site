@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block auth_content %}
+<div class="auth-box">
+    <div class="auth-header">
+        <div class="logo">
+            <i class="fas fa-check-circle"></i>
+            <span>TaskFlow</span>
+        </div>
+        <p>Gerencie suas tarefas de forma eficiente</p>
+    </div>
+
+    <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Registro</button>
+    </div>
+
+    <div class="auth-forms">
+        <!-- Formulário de Login -->
+        <form id="loginForm" action="{{ url_for('login') }}" method="POST" class="auth-form active">
+            <div class="form-group">
+                <label for="login-username">
+                    <i class="fas fa-user"></i>
+                    Usuário
+                </label>
+                <input type="text" id="login-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">
+                    <i class="fas fa-lock"></i>
+                    Senha
+                </label>
+                <div class="password-input">
+                    <input type="password" id="login-password" name="password" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group remember-me">
+                <label class="checkbox">
+                    <input type="checkbox" name="remember">
+                    <span class="checkmark"></span>
+                    Lembrar de mim
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-sign-in-alt"></i>
+                Entrar
+            </button>
+        </form>
+
+        <!-- Formulário de Registro -->
+        <form id="registerForm" action="{{ url_for('register') }}" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="register-username">
+                    <i class="fas fa-user"></i>
+                    Usuário
+                </label>
+                <input type="text" id="register-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">
+                    <i class="fas fa-lock"></i>
+                    Senha
+                </label>
+                <div class="password-input">
+                    <input type="password" id="register-password" name="password" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="register-confirm-password">
+                    <i class="fas fa-lock"></i>
+                    Confirmar Senha
+                </label>
+                <div class="password-input">
+                    <input type="password" id="register-confirm-password" name="confirm_password" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-user-plus"></i>
+                Criar Conta
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %} 

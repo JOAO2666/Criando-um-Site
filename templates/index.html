@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: var(--primary-color)">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Total de Tarefas</h3>
+                <p>{{ stats.total }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: var(--success-color)">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Concluídas</h3>
+                <p>{{ stats.completed }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: var(--warning-color)">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Pendentes</h3>
+                <p>{{ stats.pending }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: var(--danger-color)">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Urgentes</h3>
+                <p>{{ stats.urgent }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Tarefas -->
+    <div class="tasks-container">
+        <div class="tasks-header">
+            <h2>Minhas Tarefas</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="addTaskBtn">
+                    <i class="fas fa-plus"></i>
+                    Nova Tarefa
+                </button>
+            </div>
+        </div>
+
+        <div class="tasks-grid">
+            {% for task in tasks %}
+            <div class="task-card {% if task.completed %}completed{% endif %}">
+                <div class="task-card-header">
+                    <span class="task-priority {{ task.priority.lower() }}">{{ task.priority }}</span>
+                    <div class="task-actions">
+                        <button class="btn-icon" onclick="toggleTask({{ task.id }})" title="{{ 'Desmarcar' if task.completed else 'Concluir' }}">
+                            <i class="fas fa-{{ 'check-circle' if task.completed else 'circle' }}"></i>
+                        </button>
+                        <button class="btn-icon delete" onclick="deleteTask({{ task.id }})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <h3 class="task-title">{{ task.title }}</h3>
+                {% if task.description %}
+                <p class="task-description">{{ task.description }}</p>
+                {% endif %}
+                <div class="task-meta">
+                    <span class="task-category">
+                        <i class="fas fa-folder"></i>
+                        {{ task.category }}
+                    </span>
+                    {% if task.due_date %}
+                    <span class="task-due-date {% if task.due_date < now %}overdue{% endif %}">
+                        <i class="fas fa-calendar"></i>
+                        {{ task.due_date.strftime('%d/%m/%Y') }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal de Nova Tarefa -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Tarefa</h2>
+                <button class="close-modal">×</button>
+            </div>
+            <form action="{{ url_for('add_task') }}" method="POST">
+                <div class="form-group">
+                    <label for="title">Título</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descrição</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Categoria</label>
+                        <select id="category" name="category" required>
+                            <option value="">Selecione...</option>
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Prioridade</label>
+                        <select id="priority" name="priority" required>
+                            {% for priority in priorities %}
+                            <option value="{{ priority }}">{{ priority }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="due_date">Data de Vencimento</label>
+                    <input type="date" id="due_date" name="due_date">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 
